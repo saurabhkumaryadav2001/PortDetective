@@ -1,0 +1,138 @@
+<Window x:Class="PortDetective.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="clr-namespace:PortDetective.Converters"
+        Title="Settings — Port Detective"
+        Height="500" Width="480"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BackgroundBrush}"
+        Foreground="{StaticResource TextPrimaryBrush}"
+        FontFamily="{StaticResource UIFont}">
+
+    <Window.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="Settings"
+                   FontSize="20" FontWeight="Bold"
+                   Foreground="{StaticResource AccentBrush}"
+                   Margin="0,0,0,20" />
+
+        <!-- Settings form -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- Auto-refresh -->
+                <TextBlock Text="AUTO-REFRESH" Style="{StaticResource SectionHeaderStyle}" />
+
+                <DockPanel Margin="0,0,0,12">
+                    <CheckBox DockPanel.Dock="Left"
+                              Content="Enable auto-refresh"
+                              IsChecked="{Binding AutoRefreshEnabled, Mode=TwoWay}" />
+                </DockPanel>
+
+                <DockPanel Margin="0,0,0,20">
+                    <TextBlock Text="Interval (seconds):"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               VerticalAlignment="Center"
+                               Width="160" />
+                    <TextBox Style="{StaticResource NumericTextBoxStyle}"
+                             Text="{Binding AutoRefreshInterval, UpdateSourceTrigger=PropertyChanged}" />
+                </DockPanel>
+
+                <Separator />
+
+                <!-- Default range -->
+                <TextBlock Text="DEFAULT PORT RANGE"
+                           Style="{StaticResource SectionHeaderStyle}"
+                           Margin="0,12,0,8" />
+
+                <DockPanel Margin="0,0,0,20">
+                    <TextBlock Text="From:"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               VerticalAlignment="Center" Width="50" />
+                    <TextBox Style="{StaticResource NumericTextBoxStyle}"
+                             Text="{Binding DefaultPortRangeStart, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,12,0" />
+                    <TextBlock Text="To:"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               VerticalAlignment="Center" Width="30" />
+                    <TextBox Style="{StaticResource NumericTextBoxStyle}"
+                             Text="{Binding DefaultPortRangeEnd, UpdateSourceTrigger=PropertyChanged}" />
+                </DockPanel>
+
+                <Separator />
+
+                <!-- Startup -->
+                <TextBlock Text="STARTUP" Style="{StaticResource SectionHeaderStyle}"
+                           Margin="0,12,0,8" />
+
+                <CheckBox Content="Start minimized to system tray"
+                          IsChecked="{Binding StartMinimized, Mode=TwoWay}"
+                          Margin="0,0,0,8" />
+
+                <CheckBox Content="Start with Windows (adds to startup registry)"
+                          IsChecked="{Binding StartWithWindows, Mode=TwoWay}"
+                          Margin="0,0,0,12" />
+
+                <Separator />
+
+                <!-- Appearance -->
+                <TextBlock Text="APPEARANCE" Style="{StaticResource SectionHeaderStyle}"
+                           Margin="0,12,0,8" />
+
+                <DockPanel Margin="0,0,0,12">
+                    <TextBlock Text="Theme:"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               VerticalAlignment="Center" Width="80" />
+                    <ComboBox ItemsSource="{Binding ThemeOptions}"
+                              SelectedItem="{Binding Theme, Mode=TwoWay}"
+                              Width="120" />
+                </DockPanel>
+
+                <Separator />
+
+                <!-- Other -->
+                <TextBlock Text="OTHER" Style="{StaticResource SectionHeaderStyle}"
+                           Margin="0,12,0,8" />
+
+                <CheckBox Content="Show system processes in port list"
+                          IsChecked="{Binding ShowSystemProcesses, Mode=TwoWay}"
+                          Margin="0,0,0,8" />
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Status message -->
+        <TextBlock Grid.Row="2"
+                   Text="{Binding StatusMessage}"
+                   Foreground="{StaticResource SuccessBrush}"
+                   Margin="0,8,0,0"
+                   Visibility="{Binding StatusMessage, Converter={StaticResource BoolToVis}}" />
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,16,0,0">
+            <Button Content="Cancel"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Command="{Binding CancelCommand}"
+                    Width="90"
+                    Margin="0,0,8,0" />
+            <Button Content="Save Settings"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding SaveCommand}"
+                    Width="120" />
+        </StackPanel>
+    </Grid>
+</Window>
